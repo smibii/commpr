@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.smibii.commpr.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "commpr.refmap.json",
+  "mixins": [
+    "ServerPlayerMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
