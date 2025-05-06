@@ -18,9 +18,9 @@ public enum PlayerActivity {
     }
 
     public static PlayerActivity fromString(String value) {
-        for (PlayerActivity mode : PlayerActivity.values()) {
-            if (mode.value.equalsIgnoreCase(value)) {
-                return mode;
+        for (PlayerActivity activity : PlayerActivity.values()) {
+            if (activity.value.equalsIgnoreCase(value)) {
+                return activity;
             }
         }
         throw new IllegalArgumentException("Unknown mode: " + value);
