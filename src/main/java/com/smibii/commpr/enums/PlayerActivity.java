@@ -23,6 +23,6 @@ public enum PlayerActivity {
                 return activity;
             }
         }
-        throw new IllegalArgumentException("Unknown mode: " + value);
+        throw new IllegalArgumentException("Unknown activity: " + value);
     }
 }
