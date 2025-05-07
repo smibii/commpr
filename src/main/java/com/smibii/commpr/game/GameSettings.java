@@ -9,3 +9,4 @@
 // int timeLimit (minutes)
 // bool canSpectate
 // bool canFreeCam
+// bool randomSpawn
