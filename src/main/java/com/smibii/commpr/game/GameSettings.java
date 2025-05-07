@@ -1,3 +1,5 @@
+package com.smibii.commpr.game;
+
 // Game settings
 // bool eliminate
 // int lives
@@ -10,3 +12,5 @@
 // bool canSpectate
 // bool canFreeCam
 // bool randomSpawn
+public class GameSettings {
+}
