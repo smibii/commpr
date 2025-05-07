@@ -5,6 +5,7 @@ public enum PlayerActivity {
     INGAME("ingame"),
     ELIMINATED("eliminated"),
     SPECTATOR("spectator"),
+    FREECAM("freecam"),
     GAMEMASTER("gamemaster");
 
     private final String value;
