@@ -29,6 +29,8 @@ public abstract class ServerPlayerMixin implements IServerPlayerMixin {
         }
     }
 
+    // increment function
+
     @Override
     public boolean isDead() {
         return this.com$lives <= com$livesMin && this.com$lives != -1;
