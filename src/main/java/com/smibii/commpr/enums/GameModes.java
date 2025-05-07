@@ -1,5 +1,6 @@
 package com.smibii.commpr.enums;
 
+// Refactor to GameModeTypes
 public enum GameModes {
     NONE("none"),
     GUNGAME("gunGame"),
