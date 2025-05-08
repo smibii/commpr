@@ -29,7 +29,9 @@ public class SpawnPointManager {
         spawnPointMap.put(type, new ArrayList<SpawnPoint>());
     }
 
-    private void teleportToRandom(GameModeTypes type, LivingEntity entity) {
+    // spawnEntity(GameModeTypes type, int index)
+
+    private void spawnEntityRandomly(GameModeTypes type, LivingEntity entity) {
         ArrayList<SpawnPoint> spawnPointList = spawnPointMap.get(type);
         int listLength = spawnPointList.size() - 1;
         int randomIndex = (int) Math.floor(Math.random() * listLength);
