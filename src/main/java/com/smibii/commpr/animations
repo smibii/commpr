@@ -1,5 +1,5 @@
 class Animation
-public (Object<KeyframePercentage, Keyframe> keyframes, int duration, boolean loop, Player player)
+public (Map<KeyframePercentage, Keyframe> keyframes, int duration, boolean loop, Player player)
 
 class AnimationKeyframe
 
