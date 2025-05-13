@@ -29,7 +29,12 @@ public abstract class ServerPlayerMixin implements IServerPlayerMixin {
         }
     }
 
-    // increment function
+    @Override
+    public void incrementLives() {
+        if (com$lives != com$livesMax) {
+            this.com$lives++;
+        }
+    }
 
     @Override
     public boolean isDead() {

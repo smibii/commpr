@@ -16,14 +16,14 @@ public class SpawnPoint {
     private final float pitch;
     public ArrayList<GameModeTypes> typeList;
 
-    public SpawnPoint(ServerLevel level, double x, double y, double z, float yaw, float pitch, ArrayList<GameModeTypes> modesList) {
+    public SpawnPoint(ServerLevel level, double x, double y, double z, float yaw, float pitch, ArrayList<GameModeTypes> typesList) {
         this.level = level;
         this.x = x;
         this.y = y;
         this.z = z;
         this.yaw = yaw;
         this.pitch = pitch;
-        this.typeList = modesList;
+        this.typeList = typesList;
     }
 
     public void spawnEntity(LivingEntity entity) {

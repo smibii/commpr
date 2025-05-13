@@ -29,13 +29,16 @@ public class SpawnPointManager {
         spawnPointMap.put(type, new ArrayList<SpawnPoint>());
     }
 
-    // spawnEntity(GameModeTypes type, int index)
+    public void spawnEntity(GameModeTypes type, int index, LivingEntity entity) {
+        ArrayList<SpawnPoint> spawnPointList = spawnPointMap.get(type);
+        SpawnPoint spawnPoint = spawnPointList.get(index);
+        spawnPoint.spawnEntity(entity);
+    }
 
-    private void spawnEntityRandomly(GameModeTypes type, LivingEntity entity) {
+    public void spawnEntityRandomly(GameModeTypes type, LivingEntity entity) {
         ArrayList<SpawnPoint> spawnPointList = spawnPointMap.get(type);
         int listLength = spawnPointList.size() - 1;
         int randomIndex = (int) Math.floor(Math.random() * listLength);
-        SpawnPoint spawnPoint = spawnPointList.get(randomIndex);
-        spawnPoint.spawnEntity(entity);
+        spawnEntity(type, randomIndex, entity);
     }
 }
