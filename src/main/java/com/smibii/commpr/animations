@@ -1,0 +1,10 @@
+class Animation
+public (Map<KeyframePercentage, Keyframe> keyframes, int duration, boolean loop, Player player)
+
+class AnimationKeyframe
+
+class SoundAnimation
+class SoundAnimationKeyframe
+
+class TitleAnimation
+class TitleAnimationKeyframe
