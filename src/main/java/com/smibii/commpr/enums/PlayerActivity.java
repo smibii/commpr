@@ -1,5 +1,7 @@
 package com.smibii.commpr.enums;
 
+import javax.annotation.Nullable;
+
 public enum PlayerActivity {
     LOBBY("lobby"),
     INGAME("ingame"),
@@ -18,12 +20,13 @@ public enum PlayerActivity {
         return value;
     }
 
+    @Nullable
     public static PlayerActivity fromString(String value) {
         for (PlayerActivity activity : PlayerActivity.values()) {
             if (activity.value.equalsIgnoreCase(value)) {
                 return activity;
             }
         }
-        throw new IllegalArgumentException("Unknown activity: " + value);
+        return null;
     }
 }

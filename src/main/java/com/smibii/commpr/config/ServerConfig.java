@@ -5,8 +5,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public class ServerConfig {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    public static final ForgeConfigSpec.IntValue LIVES_MAX;
-    public static final ForgeConfigSpec.IntValue LIVES_MIN;
+    public static final ForgeConfigSpec.IntValue MAX_LIVES;
+    public static final ForgeConfigSpec.IntValue MIN_LIVES;
 
     public static final ForgeConfigSpec.DoubleValue LOBBY_X;
     public static final ForgeConfigSpec.DoubleValue LOBBY_Y;
@@ -14,14 +14,16 @@ public class ServerConfig {
     public static final ForgeConfigSpec.DoubleValue LOBBY_YAW;
     public static final ForgeConfigSpec.DoubleValue LOBBY_PITCH;
 
+    public static boolean isLoaded = false;
+
     static {
         BUILDER.push("Lives Settings");
 
-        LIVES_MAX = BUILDER
+        MAX_LIVES = BUILDER
                 .comment("Maximum number of lives a player can have")
                 .defineInRange("livesMax", 10, 1, 100);
 
-        LIVES_MIN = BUILDER
+        MIN_LIVES = BUILDER
                 .comment("Minimum number of lives a player can have")
                 .defineInRange("livesMin", 0, 0, 10);
 

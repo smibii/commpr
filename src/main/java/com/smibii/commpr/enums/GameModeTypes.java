@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 
 // Refactor to GameModeTypes
 public enum GameModeTypes {
-    NONE("none"),
     GUNGAME("gunGame"),
     DEATHMATCH("deathmatch"),
     ZOMBIE("zombie"),
