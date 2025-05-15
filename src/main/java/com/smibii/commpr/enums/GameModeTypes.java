@@ -3,7 +3,6 @@ package com.smibii.commpr.enums;
 
 import java.util.function.Consumer;
 
-// Refactor to GameModeTypes
 public enum GameModeTypes {
     GUNGAME("gunGame"),
     DEATHMATCH("deathmatch"),

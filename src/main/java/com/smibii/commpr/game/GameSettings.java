@@ -4,7 +4,7 @@ import com.smibii.commpr.enums.GameModeTypes;
 
 public class GameSettings {
     public GameModeTypes type;
-    public boolean eliminate;
+    public boolean elimination;
     public boolean canJoinMidGame;
     public boolean canSpectate;
     public boolean canFreeCam;
@@ -19,7 +19,7 @@ public class GameSettings {
 
     public GameSettings(
         GameModeTypes type,
-        boolean eliminate,
+        boolean elimination,
         boolean canJoinMidGame,
         boolean canSpectate,
         boolean canFreeCam,
@@ -31,7 +31,7 @@ public class GameSettings {
         int timeLimit
     ) {
         this.type = type;
-        this.eliminate = eliminate;
+        this.elimination = elimination;
         this.canJoinMidGame = canJoinMidGame;
         this.canSpectate = canSpectate;
         this.canFreeCam = canFreeCam;
