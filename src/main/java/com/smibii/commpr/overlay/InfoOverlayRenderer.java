@@ -108,11 +108,11 @@ public class InfoOverlayRenderer {
     }
 
     public static void kill(
-        String content,
         Entity targetEntity,
         Entity sourceEntity,
         DamageSource damageSource
     ) {
+        String content = sourceEntity.getName().getString() + " ︻デ═一 " + targetEntity.getName().getString();
         addInfo(
                 InfoItemTypes.KILL,
                 content,

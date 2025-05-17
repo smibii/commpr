@@ -35,7 +35,6 @@ public class InfoOverlayEvents {
         if (sourceExists) sourceName = sourceEntity.getName().getString();
 
         InfoOverlayRenderer.kill(
-                targetName + " was killed by " + sourceName,
                 target,
                 sourceEntity,
                 damageSource

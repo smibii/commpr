@@ -4,6 +4,7 @@ package com.smibii.commpr.enums;
 import java.util.function.Consumer;
 
 public enum GameModeTypes {
+    NONE("none"),
     GUNGAME("gunGame"),
     DEATHMATCH("deathmatch"),
     ZOMBIE("zombie"),

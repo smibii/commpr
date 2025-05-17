@@ -3,6 +3,7 @@ package com.smibii.commpr.register;
 import com.mojang.brigadier.CommandDispatcher;
 import com.smibii.commpr.COMMPR;
 import com.smibii.commpr.commands.DebugPlayerActivityCommand;
+import com.smibii.commpr.commands.LobbyCommand;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -14,5 +15,6 @@ public class CommandRegister {
     public static void onCommandRegister(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
         DebugPlayerActivityCommand.register(dispatcher);
+        LobbyCommand.register(dispatcher);
     }
 }
