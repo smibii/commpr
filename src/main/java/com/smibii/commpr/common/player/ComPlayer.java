@@ -1,0 +1,59 @@
+package com.smibii.commpr.common.player;
+
+import com.smibii.commpr.common.enums.gameplay.PlayerActivity;
+import com.smibii.commpr.server.config.ServerConfig;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+
+import java.io.IOException;
+
+public class ComPlayer {
+    private int lives = -1;
+    private PlayerActivity activity = PlayerActivity.LOBBY;
+    private ComPlayerLevel playerLevel = new ComPlayerLevel();
+
+    public void initPlayerLevel(Player player) {
+        if (playerLevel.isInitialized()) return;
+
+        try {
+            playerLevel.initPlayerLevel(player.getUUID());
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ComPlayerLevel getPlayerLevel() { return playerLevel; }
+
+    public int getLives() { return lives; }
+    public void setLives(int lives) {
+        if (lives == -1) this.lives = lives;
+
+        int max = ServerConfig.MAX_LIVES.get();
+        int min = ServerConfig.MIN_LIVES.get();
+
+        this.lives = Math.max(min, Math.min(max, lives));
+    }
+
+    public void incrementLives() { setLives(lives + 1); }
+    public void decrementLives() { setLives(lives - 1); }
+    public void setInvulnerable() { setLives(-1); }
+
+    public PlayerActivity getActivity() { return activity; }
+    public void setActivity(PlayerActivity activity) { this.activity = activity; }
+
+    public void saveNBTData(CompoundTag nbt) {
+        nbt.putInt("lives", lives);
+        nbt.putString("activity", activity.toString());
+        nbt.putInt("level", playerLevel.getCurrentLevel());
+        nbt.putDouble("exp", playerLevel.getExperience());
+        nbt.putDouble("rxp", playerLevel.getRequiredExperience());
+    }
+
+    public void loadNBTData(CompoundTag nbt) {
+        this.lives = nbt.getInt("lives");
+        this.activity = PlayerActivity.fromString(nbt.getString("activity"));
+        this.playerLevel.setCurrentLevel(nbt.getInt("level"));
+        this.playerLevel.setExperience(nbt.getInt("exp"));
+        this.playerLevel.setRequiredExperience(nbt.getInt("rxp"));
+    }
+}

@@ -1,12 +1,16 @@
 package com.smibii.commpr;
 
 import com.mojang.logging.LogUtils;
-import com.smibii.commpr.config.ServerConfig;
-import com.smibii.commpr.events.PlayerEvents;
-import com.smibii.commpr.network.NetworkHandler;
-import com.smibii.commpr.register.CommandRegister;
+import com.smibii.commpr.client.events.CapabilityEvents;
+import com.smibii.commpr.client.events.HudRenderEvents;
+import com.smibii.commpr.common.player.ComPlayer;
+import com.smibii.commpr.server.config.ServerConfig;
+import com.smibii.commpr.server.events.PlayerEvents;
+import com.smibii.commpr.common.network.NetworkHandler;
+import com.smibii.commpr.server.register.CommandRegister;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -32,6 +36,8 @@ public class COMMPR {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new PlayerEvents());
         MinecraftForge.EVENT_BUS.register(new CommandRegister());
+        MinecraftForge.EVENT_BUS.register(new CapabilityEvents());
+        MinecraftForge.EVENT_BUS.register(new HudRenderEvents());
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
     }
