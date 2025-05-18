@@ -3,6 +3,7 @@ package com.smibii.commpr.common.player;
 import com.smibii.commpr.common.enums.gameplay.PlayerActivity;
 import com.smibii.commpr.server.config.ServerConfig;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
 import java.io.IOException;
@@ -10,13 +11,13 @@ import java.io.IOException;
 public class ComPlayer {
     private int lives = -1;
     private PlayerActivity activity = PlayerActivity.LOBBY;
-    private ComPlayerLevel playerLevel = new ComPlayerLevel();
+    private final ComPlayerLevel playerLevel = new ComPlayerLevel();
 
     public void initPlayerLevel(Player player) {
         if (playerLevel.isInitialized()) return;
 
         try {
-            playerLevel.initPlayerLevel(player.getUUID());
+            playerLevel.initPlayerLevel(player.getUUID(), (ServerLevel) player.level());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

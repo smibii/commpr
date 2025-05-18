@@ -2,6 +2,7 @@ package com.smibii.commpr.common.player;
 
 import com.smibii.commpr.server.config.ServerConfig;
 import com.smibii.commpr.server.database.DB;
+import net.minecraft.server.level.ServerLevel;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -18,8 +19,8 @@ public class ComPlayerLevel implements Serializable {
     private double minXpGain;
     private double maxXpGain;
 
-    public void initPlayerLevel(UUID playerId) throws IOException, ClassNotFoundException {
-        DB<ComPlayerLevel> db = new DB<>("player_level");
+    public void initPlayerLevel(UUID playerId, ServerLevel level) throws IOException, ClassNotFoundException {
+        DB<ComPlayerLevel> db = new DB<>("player_level", level);
 
         ComPlayerLevel loaded = db.get(playerId.toString());
         if (loaded != null) {

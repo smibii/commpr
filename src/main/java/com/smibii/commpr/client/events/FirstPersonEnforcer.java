@@ -12,6 +12,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.EnumSet;
+
 @Mod.EventBusSubscriber(modid = COMMPR.MODID, value = Dist.CLIENT)
 public class FirstPersonEnforcer {
 
@@ -26,7 +28,12 @@ public class FirstPersonEnforcer {
         ComPlayer comPlayer = ComPlayerUtil.get(player);
         PlayerActivity activity = comPlayer.getActivity();
 
-        if (activity != PlayerActivity.LOBBY) {
+        if (EnumSet.of(
+                PlayerActivity.INGAME,
+                PlayerActivity.SPECTATOR,
+                PlayerActivity.ELIMINATED,
+                PlayerActivity.FREECAM
+        ).contains(activity)) {
             mc.options.setCameraType(CameraType.FIRST_PERSON);
             mc.options.save();
         }

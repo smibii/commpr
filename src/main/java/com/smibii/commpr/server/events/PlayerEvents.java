@@ -38,6 +38,9 @@ public class PlayerEvents {
             player.getFoodData().setSaturation(5.0f);
             player.gameMode.changeGameModeForPlayer(GameType.ADVENTURE);
         }
+
+        else if (comPlayer.getActivity() == PlayerActivity.GAMEMASTER) {}
+
         else {
             player.gameMode.changeGameModeForPlayer(GameType.SURVIVAL);
         }

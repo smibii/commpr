@@ -1,24 +1,32 @@
 package com.smibii.commpr.server.database;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.LevelResource;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DB<T extends Serializable> {
     private final Path dbFolder;
+    private final ReentrantLock lock = new ReentrantLock();
 
-    public DB(String folderPath) throws IOException {
-        dbFolder = Paths.get(folderPath);
+    public DB(String folderPath, ServerLevel level) throws IOException {
+        dbFolder = level.getServer().getWorldPath(LevelResource.ROOT).resolve(folderPath);
         if (!Files.exists(dbFolder)) {
             Files.createDirectories(dbFolder);
         }
     }
 
     public void add(String key, T object) throws IOException {
-        Path filePath = dbFolder.resolve(key + ".dat");
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath.toFile()))) {
+        lock.lock();
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(dbFolder.resolve(key + ".dat").toFile()))) {
             oos.writeObject(object);
+        } finally {
+            lock.unlock();
         }
     }
 

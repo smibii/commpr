@@ -15,7 +15,7 @@ public class HudRenderEvents {
     public static void onRenderGuiOverlay(RenderGuiOverlayEvent.Pre event) {
         String overlayId = event.getOverlay().id().getPath();
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.level == null) return;
+        if (mc.player == null || mc.player.isDeadOrDying() || mc.level == null) return;
 
         ComPlayer comPlayer = ComPlayerUtil.get(mc.player);
         if (comPlayer.getActivity() != PlayerActivity.INGAME) {
