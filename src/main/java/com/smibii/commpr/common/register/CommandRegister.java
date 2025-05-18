@@ -1,8 +1,9 @@
-package com.smibii.commpr.server.register;
+package com.smibii.commpr.common.register;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.smibii.commpr.COMMPR;
 import com.smibii.commpr.common.commands.DebugPlayerActivityCommand;
+import com.smibii.commpr.common.commands.GameMasterCommand;
 import com.smibii.commpr.common.commands.LobbyCommand;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -16,5 +17,6 @@ public class CommandRegister {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
         DebugPlayerActivityCommand.register(dispatcher);
         LobbyCommand.register(dispatcher);
+        GameMasterCommand.register(dispatcher);
     }
 }

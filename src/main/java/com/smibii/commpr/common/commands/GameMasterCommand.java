@@ -33,7 +33,7 @@ public class GameMasterCommand {
         player.gameMode.changeGameModeForPlayer(GameType.CREATIVE);
         comPlayer.setActivity(newActivity);
         ComPlayerUtil.sync(player);
-        command.sendSuccess(() -> Component.literal("GameMaster set to " + String.valueOf(isGameMaster)), false);
+        command.sendSuccess(() -> Component.literal("GameMaster set to " + String.valueOf(!isGameMaster)), false);
         return 1;
     }
 }
