@@ -17,9 +17,6 @@ public class HudRenderEvents {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
 
-        System.out.println("------------ GUI RENDER EVENT");
-        System.out.println(overlayId);
-
         ComPlayer comPlayer = ComPlayerUtil.get(mc.player);
         if (comPlayer.getActivity() != PlayerActivity.INGAME) {
             if (

@@ -27,6 +27,9 @@ public class PlayerEvents {
         if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
 
         ServerPlayer player = (ServerPlayer) event.player;
+
+        if (player.isDeadOrDying()) return;
+
         ComPlayer comPlayer = ComPlayerUtil.get(player);
 
         if (comPlayer.getActivity() == PlayerActivity.LOBBY) {
