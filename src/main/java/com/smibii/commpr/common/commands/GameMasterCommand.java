@@ -2,6 +2,7 @@ package com.smibii.commpr.common.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.smibii.commpr.common.enums.gameplay.PlayerActivity;
+import com.smibii.commpr.common.game.modes.GameModeTypes;
 import com.smibii.commpr.common.player.ComPlayer;
 import com.smibii.commpr.common.player.ComPlayerUtil;
 import net.minecraft.commands.CommandSourceStack;
@@ -27,12 +28,14 @@ public class GameMasterCommand {
         PlayerActivity activity = comPlayer.getActivity();
 
         PlayerActivity newActivity = PlayerActivity.GAMEMASTER;
+        GameType newGameMode = GameType.CREATIVE;
         boolean isGameMaster = activity.equals(newActivity);
         if (isGameMaster) newActivity = PlayerActivity.LOBBY;
+        if (isGameMaster) newGameMode = GameType.ADVENTURE;
 
-        player.gameMode.changeGameModeForPlayer(GameType.CREATIVE);
         comPlayer.setActivity(newActivity);
         ComPlayerUtil.sync(player);
+        player.gameMode.changeGameModeForPlayer(newGameMode);
         command.sendSuccess(() -> Component.literal("GameMaster set to " + String.valueOf(!isGameMaster)), false);
         return 1;
     }
