@@ -1,4 +1,4 @@
-package com.smibii.commpr.client.events;
+package com.smibii.commpr.client.listeners;
 
 import com.smibii.commpr.COMMPR;
 import com.smibii.commpr.common.player.ComPlayerProvider;

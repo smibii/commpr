@@ -110,9 +110,13 @@ public class InfoOverlayRenderer {
     public static void kill(
         Entity targetEntity,
         Entity sourceEntity,
+        boolean midAir,
+        boolean noScope,
         DamageSource damageSource
     ) {
-        String content = sourceEntity.getName().getString() + " ︻デ═一 " + targetEntity.getName().getString();
+        String airIcon = midAir ? " ^ " : "";
+        String scopeIcon = noScope ? " ⌀ " : "";
+        String content = sourceEntity.getName().getString() + airIcon + scopeIcon + " ︻デ═一 " + targetEntity.getName().getString();
         addInfo(
                 InfoItemTypes.KILL,
                 content,

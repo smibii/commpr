@@ -1,4 +1,4 @@
-package com.smibii.commpr.client.events;
+package com.smibii.commpr.client.listeners;
 
 import com.smibii.commpr.common.enums.gameplay.PlayerActivity;
 import com.smibii.commpr.common.player.ComPlayer;
@@ -18,7 +18,7 @@ public class HudRenderEvents {
         if (mc.player == null || mc.player.isDeadOrDying() || mc.level == null) return;
 
         ComPlayer comPlayer = ComPlayerUtil.get(mc.player);
-        if (comPlayer.getActivity() != PlayerActivity.INGAME) {
+        if (!comPlayer.getActivity().equals(PlayerActivity.INGAME)) {
             if (
                     overlayId.equals("player_health") ||
                     overlayId.equals("food_level") ||

@@ -1,10 +1,10 @@
 package com.smibii.commpr;
 
 import com.mojang.logging.LogUtils;
-import com.smibii.commpr.client.events.CapabilityEvents;
-import com.smibii.commpr.client.events.HudRenderEvents;
+import com.smibii.commpr.client.listeners.CapabilityEvents;
+import com.smibii.commpr.client.listeners.HudRenderEvents;
 import com.smibii.commpr.server.config.ServerConfig;
-import com.smibii.commpr.server.events.PlayerEvents;
+import com.smibii.commpr.server.listeners.PlayerEvents;
 import com.smibii.commpr.common.network.NetworkHandler;
 import com.smibii.commpr.common.register.CommandRegister;
 import net.minecraft.resources.ResourceLocation;

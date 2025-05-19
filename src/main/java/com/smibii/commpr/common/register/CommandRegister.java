@@ -5,6 +5,7 @@ import com.smibii.commpr.COMMPR;
 import com.smibii.commpr.common.commands.DebugPlayerActivityCommand;
 import com.smibii.commpr.common.commands.GameMasterCommand;
 import com.smibii.commpr.common.commands.LobbyCommand;
+import com.smibii.commpr.common.commands.ToggleMovementCommand;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,5 +19,6 @@ public class CommandRegister {
         DebugPlayerActivityCommand.register(dispatcher);
         LobbyCommand.register(dispatcher);
         GameMasterCommand.register(dispatcher);
+        ToggleMovementCommand.register(dispatcher);
     }
 }

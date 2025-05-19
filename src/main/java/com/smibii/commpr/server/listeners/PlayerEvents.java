@@ -1,11 +1,13 @@
-package com.smibii.commpr.server.events;
+package com.smibii.commpr.server.listeners;
 
 import com.smibii.commpr.server.config.ServerConfig;
 import com.smibii.commpr.common.enums.gameplay.PlayerActivity;
 import com.smibii.commpr.common.game.settings.GameSettingsUtil;
 import com.smibii.commpr.common.player.ComPlayer;
 import com.smibii.commpr.common.player.ComPlayerUtil;
+import com.smibii.commpr.server.events.PlayerActivityChangeEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.commands.GameModeCommand;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -18,31 +20,69 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.nerdorg.minehop.Minehop;
 
+import java.util.EnumSet;
 import java.util.Objects;
 
 public class PlayerEvents {
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
-
-        ServerPlayer player = (ServerPlayer) event.player;
+        if (!(event.player instanceof ServerPlayer player)) return;
 
         if (player.isDeadOrDying()) return;
 
         ComPlayer comPlayer = ComPlayerUtil.get(player);
+        PlayerActivity activity = comPlayer.getActivity();
 
-        if (comPlayer.getActivity() == PlayerActivity.LOBBY) {
+        if (activity == PlayerActivity.LOBBY) {
             player.setHealth(player.getMaxHealth());
             player.getFoodData().setFoodLevel(20);
             player.getFoodData().setSaturation(5.0f);
-            player.gameMode.changeGameModeForPlayer(GameType.ADVENTURE);
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerActivityChange(PlayerActivityChangeEvent event) {
+        if (event.player == null) return;
+
+        ServerPlayer player = event.player;
+        PlayerActivity activity = event.activity;
+
+        if (activity == PlayerActivity.LOBBY) {
+            player.setGameMode(GameType.ADVENTURE);
         }
 
-        else if (comPlayer.getActivity() == PlayerActivity.GAMEMASTER) {}
+        else if (activity == PlayerActivity.GAMEMASTER) {
+            player.setGameMode(GameType.CREATIVE);
+        }
+
+        else if (EnumSet.of(PlayerActivity.ELIMINATED, PlayerActivity.FREECAM, PlayerActivity.SPECTATOR).contains(activity)) {
+            player.setGameMode(GameType.SPECTATOR);
+        }
 
         else {
-            player.gameMode.changeGameModeForPlayer(GameType.SURVIVAL);
+            player.setGameMode(GameType.SURVIVAL);
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerGameModeChange(PlayerEvent.PlayerChangeGameModeEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        ComPlayer comPlayer = ComPlayerUtil.get(player);
+        PlayerActivity activity = comPlayer.getActivity();
+
+        if (activity.equals(PlayerActivity.LOBBY)) {
+            event.setNewGameMode(GameType.ADVENTURE);
+        }
+
+        else if (activity.equals(PlayerActivity.INGAME)) {
+            event.setNewGameMode(GameType.SURVIVAL);
+        }
+
+        else if (EnumSet.of(PlayerActivity.ELIMINATED, PlayerActivity.FREECAM, PlayerActivity.SPECTATOR).contains(activity)) {
+            event.setNewGameMode(GameType.SPECTATOR);
         }
     }
 
@@ -63,9 +103,9 @@ public class PlayerEvents {
 
             ComPlayer comPlayer = ComPlayerUtil.get(player);
             comPlayer.setInvulnerable();
-            comPlayer.setActivity(PlayerActivity.LOBBY);
             ComPlayerUtil.sync(player);
             ComPlayerUtil.syncAllToPlayer(player);
+            comPlayer.setActivity(PlayerActivity.LOBBY);
 
             if (player.level().isClientSide) return;
 
@@ -74,23 +114,30 @@ public class PlayerEvents {
     }
 
     @SubscribeEvent
-    public void onPlayerBedInteraction(PlayerInteractEvent event) {
+    public void onPlayerInteraction(PlayerInteractEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             BlockState state = event.getLevel().getBlockState(event.getPos());
             Block block = state.getBlock();
 
-            if (!(block instanceof BedBlock)) return;
+            if (block instanceof BedBlock) {
+                Objects.requireNonNull(player.getServer()).executeIfPossible(() -> {
+                    double x = ServerConfig.LOBBY_X.get();
+                    double y = ServerConfig.LOBBY_Y.get();
+                    double z = ServerConfig.LOBBY_Z.get();
+                    float pitch = ServerConfig.LOBBY_PITCH.get().floatValue();
 
-            Objects.requireNonNull(player.getServer()).executeIfPossible(() -> {
-                double x = ServerConfig.LOBBY_X.get();
-                double y = ServerConfig.LOBBY_Y.get();
-                double z = ServerConfig.LOBBY_Z.get();
-                float pitch = ServerConfig.LOBBY_PITCH.get().floatValue();
+                    BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
 
-                BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
+                    player.setRespawnPosition(Level.OVERWORLD, pos, pitch, true, false);
+                });
+            }
 
-                player.setRespawnPosition(Level.OVERWORLD, pos, pitch, true, false);
-            });
+            if (player.isDeadOrDying()) return;
+
+            ComPlayer comPlayer = ComPlayerUtil.get(player);
+            PlayerActivity activity = comPlayer.getActivity();
+
+            if (activity.equals(PlayerActivity.INGAME)) event.setCanceled(true);
         }
     }
 

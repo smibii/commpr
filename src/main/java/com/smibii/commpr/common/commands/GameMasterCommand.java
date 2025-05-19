@@ -31,11 +31,9 @@ public class GameMasterCommand {
         GameType newGameMode = GameType.CREATIVE;
         boolean isGameMaster = activity.equals(newActivity);
         if (isGameMaster) newActivity = PlayerActivity.LOBBY;
-        if (isGameMaster) newGameMode = GameType.ADVENTURE;
 
         comPlayer.setActivity(newActivity);
         ComPlayerUtil.sync(player);
-        player.gameMode.changeGameModeForPlayer(newGameMode);
         command.sendSuccess(() -> Component.literal("GameMaster set to " + String.valueOf(!isGameMaster)), false);
         return 1;
     }

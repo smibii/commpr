@@ -1,4 +1,4 @@
-package com.smibii.commpr.server.events;
+package com.smibii.commpr.server.listeners;
 
 import com.smibii.commpr.COMMPR;
 import com.smibii.commpr.server.config.ServerConfig;
