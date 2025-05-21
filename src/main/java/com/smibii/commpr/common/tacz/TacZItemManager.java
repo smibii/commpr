@@ -1,9 +1,11 @@
 package com.smibii.commpr.common.tacz;
 
+import com.tacz.guns.api.item.attachment.AttachmentType;
 import com.tacz.guns.api.item.gun.FireMode;
 import com.tacz.guns.client.resource.ClientIndexManager;
 import com.tacz.guns.client.resource.index.ClientAttachmentIndex;
 import com.tacz.guns.client.resource.index.ClientGunIndex;
+import com.tacz.guns.item.AttachmentItem;
 import com.tacz.guns.item.ModernKineticGunItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -32,11 +34,13 @@ public class TacZItemManager {
     public static List<ResourceLocation> STOCK = new ArrayList<>();
     public static List<ResourceLocation> EXTENDED_MAG = new ArrayList<>();
     public static List<ResourceLocation> LASER = new ArrayList<>();
+    public static List<ResourceLocation> SIGHT = new ArrayList<>();
+    public static List<ResourceLocation> AMMO = new ArrayList<>();
+    public static List<ResourceLocation> BAYONET = new ArrayList<>();
 
     public static boolean isLoaded = false;
 
     static {
-        System.out.println("LOADING ----------------------------------------------dawdWDAWDwdawdAWDwdawdawdWDAD");
         loadGuns();
         loadAttachments();
     }
@@ -50,7 +54,7 @@ public class TacZItemManager {
 
             String gunType = gunIndex.getType();
             FireMode fireMode = gunIndex.getGunData().getFireModeSet().get(0);
-            int ammo = gunIndex.getGunData().getAmmoAmount();
+            int ammo = gunIndex.getGunData().getAmmoAmount() + 1;
 
             ItemStack item = createItemStack(location, fireMode, ammo);
 
@@ -67,16 +71,21 @@ public class TacZItemManager {
     }
 
     private static void loadAttachments() {
-        ClientIndexManager.loadGunIndex();
+        ClientIndexManager.loadAttachmentIndex();
         Set<Map.Entry<ResourceLocation, ClientAttachmentIndex>> attachmentIndexSet = ClientIndexManager.getAllAttachments();
-        System.out.println(attachmentIndexSet);
         for (Map.Entry<ResourceLocation, ClientAttachmentIndex> entry : attachmentIndexSet) {
-            ClientAttachmentIndex attachmentIndex = entry.getValue();
             ResourceLocation location = entry.getKey();
+            String type = location.getPath();
 
-            System.out.println(attachmentIndex.getSlotTexture());
-
-            if (attachmentIndex.isScope()) SCOPE.add(location);
+            if (type.contains("scope")) SCOPE.add(location);
+            if (type.contains("grip")) GRIP.add(location);
+            if (type.contains("muzzle")) MUZZLE.add(location);
+            if (type.contains("stock")) STOCK.add(location);
+            if (type.contains("extended_mag")) EXTENDED_MAG.add(location);
+            if (type.contains("laser")) LASER.add(location);
+            if (type.contains("sight")) SIGHT.add(location);
+            if (type.contains("ammo")) AMMO.add(location);
+            if (type.contains("bayonet")) BAYONET.add(location);
         }
     }
 

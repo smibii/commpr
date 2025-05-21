@@ -50,9 +50,9 @@ public class FirstPersonEnforcer {
         PlayerActivity activity = comPlayer.getActivity();
 
         if (ENFORCED_ACTIVITIES.contains(activity)) {
-            KeyMapping perspectiveKey = mc.options.keyTogglePerspective;
-            if (event.getKey() == perspectiveKey.getKey().getValue() && event.getAction() == GLFW_PRESS) {
-                perspectiveKey.setDown(false);
+            KeyMapping key = mc.options.keyTogglePerspective;
+            if (event.getKey() == key.getKey().getValue() && event.getAction() == GLFW_PRESS) {
+                key.setDown(false);
                 event.setCanceled(true);
             }
         }
