@@ -1,5 +1,6 @@
 package com.smibii.commpr.server.listeners;
 
+import com.smibii.commpr.common.tacz.TacZItemManager;
 import com.smibii.commpr.server.config.ServerConfig;
 import com.smibii.commpr.common.enums.gameplay.PlayerActivity;
 import com.smibii.commpr.common.game.settings.GameSettingsUtil;
@@ -7,8 +8,8 @@ import com.smibii.commpr.common.player.ComPlayer;
 import com.smibii.commpr.common.player.ComPlayerUtil;
 import com.smibii.commpr.server.events.PlayerActivityChangeEvent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.commands.GameModeCommand;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
@@ -20,9 +21,9 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.nerdorg.minehop.Minehop;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Objects;
 
 public class PlayerEvents {
@@ -73,14 +74,8 @@ public class PlayerEvents {
         ComPlayer comPlayer = ComPlayerUtil.get(player);
         PlayerActivity activity = comPlayer.getActivity();
 
-        if (activity.equals(PlayerActivity.LOBBY)) {
-            event.setNewGameMode(GameType.ADVENTURE);
-        }
-
-        else if (activity.equals(PlayerActivity.INGAME)) {
-            event.setNewGameMode(GameType.SURVIVAL);
-        }
-
+        if (activity.equals(PlayerActivity.LOBBY)) event.setNewGameMode(GameType.ADVENTURE);
+        else if (activity.equals(PlayerActivity.INGAME)) event.setNewGameMode(GameType.SURVIVAL);
         else if (EnumSet.of(PlayerActivity.ELIMINATED, PlayerActivity.FREECAM, PlayerActivity.SPECTATOR).contains(activity)) {
             event.setNewGameMode(GameType.SPECTATOR);
         }
@@ -107,9 +102,10 @@ public class PlayerEvents {
             ComPlayerUtil.syncAllToPlayer(player);
             comPlayer.setActivity(PlayerActivity.LOBBY);
 
-            if (player.level().isClientSide) return;
+            if (!player.level().isClientSide) GameSettingsUtil.syncPlayer(player);
 
-            GameSettingsUtil.syncPlayer(player);
+            List<ItemStack> primary = TacZItemManager.SNIPER;
+            if (primary.size() != 0) player.getInventory().add(primary.get(0));
         }
     }
 
@@ -152,10 +148,7 @@ public class PlayerEvents {
 
         ComPlayer comPlayer = ComPlayerUtil.get(player);
 
-        if (!comPlayer.getActivity().equals(PlayerActivity.INGAME)) {
-            event.setCanceled(true);
-            return;
-        }
+        if (!comPlayer.getActivity().equals(PlayerActivity.INGAME)) event.setCanceled(true);
     }
 
     @SubscribeEvent

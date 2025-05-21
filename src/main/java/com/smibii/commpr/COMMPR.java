@@ -3,6 +3,7 @@ package com.smibii.commpr;
 import com.mojang.logging.LogUtils;
 import com.smibii.commpr.client.listeners.CapabilityEvents;
 import com.smibii.commpr.client.listeners.HudRenderEvents;
+import com.smibii.commpr.common.tacz.TacZItemManager;
 import com.smibii.commpr.server.config.ServerConfig;
 import com.smibii.commpr.server.listeners.PlayerEvents;
 import com.smibii.commpr.common.network.NetworkHandler;
