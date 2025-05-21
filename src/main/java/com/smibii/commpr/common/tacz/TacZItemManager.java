@@ -1,11 +1,9 @@
 package com.smibii.commpr.common.tacz;
 
-import com.tacz.guns.api.item.attachment.AttachmentType;
 import com.tacz.guns.api.item.gun.FireMode;
 import com.tacz.guns.client.resource.ClientIndexManager;
 import com.tacz.guns.client.resource.index.ClientAttachmentIndex;
 import com.tacz.guns.client.resource.index.ClientGunIndex;
-import com.tacz.guns.item.AttachmentItem;
 import com.tacz.guns.item.ModernKineticGunItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -43,6 +41,7 @@ public class TacZItemManager {
     static {
         loadGuns();
         loadAttachments();
+        isLoaded = true;
     }
 
     private static void loadGuns() {
@@ -75,26 +74,35 @@ public class TacZItemManager {
         Set<Map.Entry<ResourceLocation, ClientAttachmentIndex>> attachmentIndexSet = ClientIndexManager.getAllAttachments();
         for (Map.Entry<ResourceLocation, ClientAttachmentIndex> entry : attachmentIndexSet) {
             ResourceLocation location = entry.getKey();
-            String type = location.getPath();
+            String slot = getAttachmentSlot(location);
 
-            if (type.contains("scope")) SCOPE.add(location);
-            if (type.contains("grip")) GRIP.add(location);
-            if (type.contains("muzzle")) MUZZLE.add(location);
-            if (type.contains("stock")) STOCK.add(location);
-            if (type.contains("extended_mag")) EXTENDED_MAG.add(location);
-            if (type.contains("laser")) LASER.add(location);
-            if (type.contains("sight")) SIGHT.add(location);
-            if (type.contains("ammo")) AMMO.add(location);
-            if (type.contains("bayonet")) BAYONET.add(location);
+            switch (slot) {
+                case "AttachmentSCOPE": SCOPE.add(location);
+                case "AttachmentGTIP": GRIP.add(location);
+                case "AttachmentMUZZLE": MUZZLE.add(location);
+                case "AttachmentSTOCK": STOCK.add(location);
+                case "AttachmentEXTENDED_MAG": EXTENDED_MAG.add(location);
+                case "AttachmentLASER": LASER.add(location);
+                case "AttachmentSIGHT": SIGHT.add(location);
+                case "AttachmentAMMO": AMMO.add(location);
+                case "AttachmentBAYONET": BAYONET.add(location);
+            }
         }
     }
 
-    @SafeVarargs
+    public static ItemStack createItemStack(
+            ResourceLocation location,
+            FireMode fireMode,
+            int ammo
+    ) {
+        return createItemStack(location, fireMode, ammo, null);
+    }
+
     public static ItemStack createItemStack(
             ResourceLocation location,
             FireMode fireMode,
             int ammo,
-            Map<String, ResourceLocation>... attachments
+            Map<String, ResourceLocation> attachments
     ) {
         Item gunItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation("tacz", "modern_kinetic_gun"));
         if (!(gunItem instanceof ModernKineticGunItem)) return ItemStack.EMPTY;
@@ -107,42 +115,55 @@ public class TacZItemManager {
         stack.setTag(tag);
 
         if (attachments != null) {
-            for (Map<String, ResourceLocation> map : attachments) {
-                if (map == null) continue;
-                for (Map.Entry<String, ResourceLocation> entry : map.entrySet()) {
-                    attachAttachment(stack, entry.getKey(), entry.getValue());
-                }
-            }
+            attachAttachments(stack, attachments);
         }
 
         return stack;
     }
 
-    public static void attachAttachment(ItemStack gunStack, String slot, ResourceLocation attachmentLocation) {
+    public static void attachAttachments(ItemStack gunStack, Map<String, ResourceLocation> attachments) {
         if (gunStack == null || gunStack.isEmpty()) return;
 
         CompoundTag tag = gunStack.getOrCreateTag();
 
-        CompoundTag attachmentTag = new CompoundTag();
-        attachmentTag.putString("AttachmentId", attachmentLocation.toString());
+        for (Map.Entry<String, ResourceLocation> entry : attachments.entrySet()) {
+            String type = entry.getKey();
+            ResourceLocation attachment = entry.getValue();
 
-        CompoundTag wrapper = new CompoundTag();
-        wrapper.put("tag", attachmentTag);
-        wrapper.putString("id", "tacz:attachment");
-        wrapper.putByte("Count", (byte) 1);
+            CompoundTag attachmentTag = new CompoundTag();
+            attachmentTag.putString("AttachmentId", attachment.toString());
 
-        tag.put(slot, wrapper);
+            CompoundTag wrapper = new CompoundTag();
+            wrapper.put("tag", attachmentTag);
+            wrapper.putString("id", "tacz:attachment");
+            wrapper.putByte("Count", (byte) 1);
+
+            tag.put(type, wrapper);
+        }
+
         gunStack.setTag(tag);
     }
 
-    public static ItemStack createAttachment(String attachmentId) {
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation("tacz", "attachment"));
-        if (item == null) return ItemStack.EMPTY;
+    public static Map<String, ResourceLocation> createAttachments(ResourceLocation... locations) {
+        Map<String, ResourceLocation> attachments = new HashMap<>();
+        for (ResourceLocation location : locations) {
+            String slot = getAttachmentSlot(location);
+            attachments.put(slot, location);
+        }
+        return attachments;
+    }
 
-        ItemStack stack = new ItemStack(item);
-        CompoundTag tag = new CompoundTag();
-        tag.putString("AttachmentId", attachmentId);
-        stack.setTag(tag);
-        return stack;
+    private static String getAttachmentSlot(ResourceLocation location) {
+        String path = location.getPath();
+        if (path.contains("scope")) return "AttachmentSCOPE";
+        if (path.contains("grip")) return "AttachmentGRIP";
+        if (path.contains("muzzle")) return "AttachmentMUZZLE";
+        if (path.contains("stock")) return "AttachmentSTOCK";
+        if (path.contains("extended_mag")) return "AttachmentEXTENDED_MAG";
+        if (path.contains("laser")) return "AttachmentLASER";
+        if (path.contains("sight")) return "AttachmentSIGHT";
+        if (path.contains("ammo")) return "AttachmentAMMO";
+        if (path.contains("bayonet")) return "AttachmentBAYONET";
+        return "unknown";
     }
 }

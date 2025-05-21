@@ -1,5 +1,8 @@
 package com.smibii.commpr.server.listeners;
 
+import com.smibii.commpr.common.enums.tacz.Attachment;
+import com.smibii.commpr.common.enums.tacz.PrimaryGun;
+import com.smibii.commpr.common.enums.tacz.SecondaryGun;
 import com.smibii.commpr.common.tacz.TacZItemManager;
 import com.smibii.commpr.server.config.ServerConfig;
 import com.smibii.commpr.common.enums.gameplay.PlayerActivity;
@@ -8,6 +11,7 @@ import com.smibii.commpr.common.player.ComPlayer;
 import com.smibii.commpr.common.player.ComPlayerUtil;
 import com.smibii.commpr.server.events.PlayerActivityChangeEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -24,6 +28,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class PlayerEvents {
@@ -104,8 +109,15 @@ public class PlayerEvents {
 
             if (!player.level().isClientSide) GameSettingsUtil.syncPlayer(player);
 
-            List<ItemStack> primary = TacZItemManager.SNIPER;
-            if (primary.size() != 0) player.getInventory().add(primary.get(0));
+            ItemStack rifle = PrimaryGun.RIFLE.get(0);
+            ItemStack sniper = PrimaryGun.SNIPER.get(0);
+            Map<String, ResourceLocation> attachments = TacZItemManager.createAttachments(
+                    Attachment.MUZZLE.get(0),
+                    Attachment.EXTENDED_MAG.get(0)
+            );
+            TacZItemManager.attachAttachments(rifle, attachments);
+            player.getInventory().add(rifle);
+            player.getInventory().add(sniper);
         }
     }
 
