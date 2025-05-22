@@ -15,7 +15,7 @@ import java.util.*;
 
 public class TacZItemManager {
     // Primary
-    public static List<ItemStack> SNIPER = new ArrayList<>();
+    public static Map<ResourceLocation, ItemStack> SNIPER = new ArrayList<>();
     public static List<ItemStack> RIFLE = new ArrayList<>();
     public static List<ItemStack> SHOTGUN = new ArrayList<>();
     public static List<ItemStack> MG = new ArrayList<>();
