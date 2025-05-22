@@ -16,14 +16,14 @@ import java.util.*;
 public class TacZItemManager {
     // Primary
     public static Map<ResourceLocation, ItemStack> SNIPER = new ArrayList<>();
-    public static List<ItemStack> RIFLE = new ArrayList<>();
-    public static List<ItemStack> SHOTGUN = new ArrayList<>();
-    public static List<ItemStack> MG = new ArrayList<>();
+    public static Map<ResourceLocation, ItemStack> RIFLE = new ArrayList<>();
+    public static Map<ResourceLocation, ItemStack> SHOTGUN = new ArrayList<>();
+    public static Map<ResourceLocation, ItemStack> MG = new ArrayList<>();
 
     // Secondary
-    public static List<ItemStack> RPG = new ArrayList<>();
-    public static List<ItemStack> SMG = new ArrayList<>();
-    public static List<ItemStack> PISTOL = new ArrayList<>();
+    public static Map<ResourceLocation, ItemStack> RPG = new ArrayList<>();
+    public static Map<ResourceLocation, ItemStack> SMG = new ArrayList<>();
+    public static Map<ResourceLocation, ItemStack> PISTOL = new ArrayList<>();
 
     // Attachments
     public static List<ResourceLocation> SCOPE = new ArrayList<>();
@@ -58,13 +58,13 @@ public class TacZItemManager {
             ItemStack item = createItemStack(location, fireMode, ammo);
 
             switch (gunType) {
-                case "sniper": SNIPER.add(item);
-                case "rifle": RIFLE.add(item);
-                case "shotgun": SHOTGUN.add(item);
-                case "mg": MG.add(item);
-                case "rpg": RPG.add(item);
-                case "smg": SMG.add(item);
-                case "pistol": PISTOL.add(item);
+                case "sniper": SNIPER.put(location, item);
+                case "rifle": RIFLE.put(location, item);
+                case "shotgun": SHOTGUN.put(location, item);
+                case "mg": MG.put(location, item);
+                case "rpg": RPG.put(location, item);
+                case "smg": SMG.put(location, item);
+                case "pistol": PISTOL.put(location, item);
             }
         }
     }
